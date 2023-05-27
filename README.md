@@ -16,12 +16,12 @@ Uma API para sistema de controle de alimentos em centros de distribuições
     - [mostrar detalhes](#mostrar-detalhes-empresa)
     - [apagar](#apagar-empresas)
 - Centros de distribuição
-    - [cadastrar](#cadastrar-centros-de-distribuio)
-    - [atualizar](#atualizar-centros-de-distribuio)
-    - [mostrar detalhes](#mostrar-detalhes-centro-de-distribuio)
-    - [listar todos](#listar-todos-centros-de-distribuio)
-    - [apagar](#apagar-centros-de-distribuio)
-    - [desativar/ ativar](#desativar-ativar-centros-de-distribuio)
+    - [cadastrar](#cadastrar-centros-de-distribuição)
+    - [atualizar](#atualizar-centros-de-distribuição)
+    - [mostrar detalhes](#mostrar-detalhes-centro-de-distribuição)
+    - [listar todos](#listar-todos-centros-de-distribuição)
+    - [apagar](#apagar-centros-de-distribuição)
+    - [desativar/ ativar](#desativar-ativar-centros-de-distribuição)
 - Alimentos
     - cadastrar
     - atualizar
