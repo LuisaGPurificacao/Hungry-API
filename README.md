@@ -23,11 +23,10 @@ Uma API para sistema de controle de alimentos em centros de distribuições
     - [apagar](#apagar-centros-de-distribuição)
     - [desativar/ ativar](#desativar-ativar-centros-de-distribuição)
 - Alimentos
-    - cadastrar
-    - atualizar
-    - listar top 3
-    - listar todos
-    - apagar
+    - [cadastrar](#cadastrar-alimentos)
+    - [atualizar](#atualizar-alimentos)
+    - [mostrar detalhes](#mostrar-detalhes-alimento)
+    - [apagar](#apagar-alimentos)
 
 ---
 
@@ -44,7 +43,7 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 | nome          | String |     sim     | o nome da empresa                                                                  |
 | nome fantasia | String |     não     | o nome fantasia da empresa                                                         |
 | cnpj          | long   |     sim     | o CNPJ da empresa, deve ser validado com 14 números                                |
-| email         | String |     sim     | o e-mail da empresa, deve ser um e-mail válido                                     |
+| email         | String |     não     | o e-mail da empresa, deve ser um e-mail válido                                     |
 | descricao     | String |     não     | uma descrição sobre a empresa                                                      |
 | cep           | int    |     sim     | o CEP de onde fica localizada a empresa, deve ser validado com 8 números           |
 | país          | String |     sim     | o país onde fica localizada a empresa                                              |
@@ -314,6 +313,8 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 `GET` /hungry/api/centros/{id}
 
 > Endpoint para o centro de distribuição visualizar o seu perfil com todos seus dados
+>
+> Todos os alimentos cadastrados nesse centro de distribuição serão mostrados
 
 **Exemplo de corpo de resposta**
 
@@ -337,7 +338,24 @@ Uma API para sistema de controle de alimentos em centros de distribuições
        "logradouro": "Rua Centro",
        "numero": 6969,
        "complemento": "Perto da praça"
-    }
+    },
+    "alimentos": [
+        {
+           "nome": "Banana",
+           "quantidade": 50,
+           "categoria": "Frutas",
+        },
+        {
+           "nome": "Arroz",
+           "quantidade": 300,
+           "categoria": "Grãos",
+        },
+        {
+           "nome": "Frango",
+           "quantidade": 150,
+           "categoria": "Proteínas",
+        }
+    ]
 }
 ```
 
@@ -355,6 +373,8 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 `GET` /hungry/api/centros
 
 > Endpoint para visualizar todos os centros de distribuição cadastrados no sistema
+>
+> Mostrará um TOP 3 com os alimentos com a maior quantidade de cada centro de distribuição
 
 **Exemplo de corpo de resposta**
 
@@ -370,7 +390,24 @@ Uma API para sistema de controle de alimentos em centros de distribuições
          "estado": "SP",
          "cidade": "São Paulo",
          "bairro": "Centro Histórico de São Paulo"
-      }
+      },
+      "alimentos": [
+          {
+             "nome": "Banana",
+             "quantidade": 50,
+             "categoria": "Frutas",
+          },
+          {
+             "nome": "Arroz",
+             "quantidade": 300,
+             "categoria": "Grãos",
+          },
+          {
+             "nome": "Frango",
+             "quantidade": 150,
+              "categoria": "Proteínas",
+          }
+      ]
     },
     {
       "id": 16
@@ -382,7 +419,24 @@ Uma API para sistema de controle de alimentos em centros de distribuições
          "estado": "SP",
          "cidade": "São Paulo",
          "bairro": "Paraíso"
-      }
+      },
+      "alimentos": [
+          {
+             "nome": "Morango",
+             "quantidade": 25,
+             "categoria": "Frutas",
+          },
+          {
+             "nome": "Feijão",
+             "quantidade": 262,
+             "categoria": "Grãos",
+          },
+          {
+             "nome": "Carne de boi",
+             "quantidade": 28,
+              "categoria": "Proteínas",
+          }
+      ]
     }
 ]
 ```
@@ -435,5 +489,141 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 | código | descrição                                            |
 |--------|------------------------------------------------------|
 | 200    | centro de distribuição atualizado como ativo/inativo |
+| 400    | campo inválido                                       |
 | 404    | não existe centro de distribuição com o ID informado |
 
+---
+
+### Cadastrar Alimentos
+
+`POST` /hungry/api/alimentos
+
+> Endpoint para adicionar alimentos em um centro de distribuição
+
+**Campos da requisição**
+
+| campo      | tipo   | obrigatório | descrição                                                   |
+|------------|--------|:-----------:|-------------------------------------------------------------|
+| nome       | String |     sim     | o nome do alimento                                          |
+| quantidade | int    |     sim     | a quantidade do alimento em kilogramas                      |
+| categoria  | String |     sim     | a categoria do alimento                                     |
+| foto       | String |     não     | a foto do alimento para análise com inteligência artificial |
+| centro_id  | Long   |     sim     | o ID do centro de distribuição que recebeu esse alimento    |
+| empresa_id | Long   |     sim     | o ID da empresa que disponibilizou esse alimento            |
+
+**Exemplo de corpo de requisição**
+
+```js
+{
+    "nome": "Banana",
+    "quantidade": 100,
+    "categoria": "frutas",
+    "foto": "https://foto.com",
+    "centro": {
+      "id": 12
+    },
+    "empresa": {
+      "id": 198
+    }
+}
+```
+
+**Códigos de Respostas**
+
+| código | descrição                       |
+|--------|---------------------------------|
+| 200    | alimento cadastrado com sucesso |
+| 400    | campos inválidos                |
+
+---
+
+### Atualizar Alimentos
+
+`PUT` /hungry/api/alimentos/{id}
+
+> Endpoint para atualizar alimentos
+
+**Campos da requisição**
+
+| campo      | tipo   | obrigatório | descrição                                                   |
+|------------|--------|:-----------:|-------------------------------------------------------------|
+| nome       | String |     não     | o nome do alimento                                          |
+| quantidade | int    |     não     | a quantidade do alimento em kilogramas                      |
+| categoria  | String |     não     | a categoria do alimento                                     |
+| foto       | String |     não     | a foto do alimento para análise com inteligência artificial |
+| centro_id  | Long   |     não     | o ID do centro de distribuição que recebeu esse alimento    |
+| empresa_id | Long   |     não     | o ID da empresa que disponibilizou esse alimento            |
+
+**Exemplo de corpo de requisição**
+
+```js
+{
+    "nome": "Banana",
+    "quantidade": 50,
+    "categoria": "frutas",
+    "foto": "https://foto.com",
+    "centro": {
+      "id": 12
+    },
+    "empresa": {
+      "id": 198
+    }
+}
+```
+
+**Códigos de Respostas**
+
+| código | descrição                              |
+|--------|----------------------------------------|
+| 200    | alimento atualizado com sucesso        |
+| 404    | não existe alimento com o ID informado |
+
+---
+
+### Mostrar Detalhes Alimento
+
+`GET` /hungry/api/alimentos/{id}
+
+> Endpoint para visualizar os detalhes do alimento
+
+**Exemplo de corpo de resposta**
+
+```js
+{
+    "id": 190
+    "nome": "Banana",
+    "quantidade": 50,
+    "categoria": "frutas",
+    "foto": "https://foto.com",
+    "centro": {
+      "id": 12
+    },
+    "empresa": {
+      "id": 198
+    }
+}
+```
+
+**Códigos de Respostas**
+
+| código | descrição                              |
+|--------|----------------------------------------|
+| 200    | dados do alimento retornados           |
+| 404    | não existe alimento com o ID informado |
+
+---
+
+### Apagar Alimentos
+
+`DELETE` /hungry/api/alimentos/{id}
+
+> Endpoint para apagar alimentos
+
+**Códigos de Respostas**
+
+| código | descrição                              |
+|--------|----------------------------------------|
+| 204    | alimento apagado com sucesso           |
+| 404    | não existe alimento com o ID informado |
+
+---
