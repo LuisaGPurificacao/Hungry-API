@@ -1,7 +1,6 @@
-package br.com.hungry.infra.repositories;
+package br.com.hungry.infra.db.repositories;
 
-import br.com.hungry.infra.models.Empresa;
-import br.com.hungry.infra.models.Endereco;
+import br.com.hungry.infra.db.models.Empresa;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EmpresaRepository extends JpaRepository<Empresa, Long> {

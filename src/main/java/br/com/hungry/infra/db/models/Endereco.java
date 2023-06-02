@@ -1,4 +1,4 @@
-package br.com.hungry.infra.models;
+package br.com.hungry.infra.db.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
