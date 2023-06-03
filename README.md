@@ -28,9 +28,9 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 ### 2ª Opção: Rodar o .jar pelo terminal
 
 - Abrir o terminal do seu computador
-- Ir até o caminho do projeto e entrar na pasta do projeto (Hungry-API), e depois a pasta "target"
-  - `cd Hungry-API/target`
-- Rodar o comando: `java -jar hungry-api-0.0.1-SNAPSHOT.jar` 
+- Ir até o caminho do projeto e entrar na pasta do projeto (Hungry-API)
+  - `cd Hungry-API`
+- Rodar o comando: `java -jar hungry-api.jar` 
 - A aplicação vai começar a rodar, e você poderá acompanhar os logs pelo terminal do seu computador
 
 ---
