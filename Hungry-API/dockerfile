@@ -1,0 +1,13 @@
+# imagem base a ser usada para construir o container
+FROM openjdk:17-oracle
+
+# definindo o diretório de trabalho dentro do container
+WORKDIR /hungryapi
+
+# copiando o executável java para a pasta dentro do container 
+COPY /hungry-api-0.0.1-SNAPSHOT.jar ./hungryapi.jar
+
+# especifica a porta que será exposta pelo container
+EXPOSE 8080
+
+CMD ["java", "-jar", "hungryapi.jar"]

@@ -1,0 +1,12 @@
+version: '3'
+services:
+  hungryapi:
+    build:
+
+    # pasta onde o dockerfile está localizado
+      context: ./Hungry-API
+      dockerfile: dockerfile
+
+      # porta que a api irá utilizar
+    ports:
+      - 8080:8080
