@@ -5,6 +5,7 @@ import br.com.hungry.domain.exceptions.RestNotFoundException;
 import br.com.hungry.infra.db.models.CentroDistribuicao;
 import br.com.hungry.infra.db.repositories.CentroDistribuicaoRepository;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -50,6 +51,16 @@ public class CentroDistribuicaoController {
         log.info("Removendo o centro de distribuição com id: {}", id);
         repository.delete(getCentroDistribuicao(id));
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<CentroDistribuicao> atualizarStatus(@PathVariable Long id) {
+        log.info("Atualizando o status do centro de distribuição com id: {}", id);
+        CentroDistribuicao centroDistribuicao = getCentroDistribuicao(id);
+        centroDistribuicao.setId(id);
+        centroDistribuicao.setAtivo(!centroDistribuicao.isAtivo());
+        centroDistribuicao = repository.save(centroDistribuicao);
+        return ResponseEntity.ok(centroDistribuicao);
     }
 
     private CentroDistribuicao getCentroDistribuicao(Long id) {
