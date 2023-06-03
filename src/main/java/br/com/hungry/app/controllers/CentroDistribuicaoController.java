@@ -5,12 +5,15 @@ import br.com.hungry.domain.exceptions.RestNotFoundException;
 import br.com.hungry.infra.db.models.CentroDistribuicao;
 import br.com.hungry.infra.db.repositories.CentroDistribuicaoRepository;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -19,6 +22,23 @@ public class CentroDistribuicaoController {
 
     @Autowired
     private CentroDistribuicaoRepository repository;
+
+    @GetMapping
+    public ResponseEntity<Page<CentroDistribuicao>> index(@RequestParam(required = false) String nome,
+                                                          @RequestParam(required = false) String cidade,
+                                                          @RequestParam(required = false) String bairro,
+                                                          @RequestParam(required = false) String nomeAlimento,
+                                                          @RequestParam(required = false) String categoriaAlimento,
+                                                          @PageableDefault(size = 5, sort = "nome", direction = Sort.Direction.ASC) Pageable pageable) {
+        Page<CentroDistribuicao> centros = null;
+        if (nome == null && cidade == null && bairro == null && nomeAlimento == null && categoriaAlimento == null)
+            centros = repository.findAll(pageable);
+        else {
+            List<CentroDistribuicao> centrosList = repository.search(nome, cidade, bairro, nomeAlimento, categoriaAlimento);
+            centros = new PageImpl<CentroDistribuicao>(centrosList, pageable, centrosList.size());
+        }
+        return ResponseEntity.ok(centros);
+    }
 
     @PostMapping
     public ResponseEntity<CentroDistribuicao> adicionar(@RequestBody @Valid CentroDistribuicao centroDistribuicao, UriComponentsBuilder uriBuilder) {
