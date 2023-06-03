@@ -1,5 +1,7 @@
 package br.com.hungry.infra.db.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -41,17 +43,19 @@ public class Alimento {
     @Column(name = "dt_validade", nullable = false)
     @NotNull(message = "A data de validade é obrigatória")
     @JsonProperty(value = "data_validade")
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataValidade;
 
     @ManyToOne
     @JoinColumn(name = "id_centro_dist", nullable = false)
     @NotNull(message = "O centro de distribuição é obrigatório")
-    @JsonProperty(value = "centro_distribuicao")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY, value = "centro_distribuicao")
     private CentroDistribuicao centroDistribuicao;
 
     @ManyToOne
     @JoinColumn(name = "id_empresa", nullable = false)
     @NotNull(message = "A empresa é obrigatória")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY, value = "empresa")
     private Empresa empresa;
 
 }
