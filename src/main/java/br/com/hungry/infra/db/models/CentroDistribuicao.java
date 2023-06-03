@@ -46,18 +46,17 @@ public class CentroDistribuicao {
     @Size(max = 10, message = "A capacidade não pode passar de 10 caracteres")
     private String capacidade;
 
-    @Column(name = "ds_armazenamento", nullable = false, length = 150)
+    @Column(name = "ds_armazenamento", nullable = false, length = 10)
     @NotBlank(message = "O armazenamento é obrigatório")
-    @Size(max = 150, message = "O armazenamento não pode passar de 150 caracteres")
+    @Size(max = 10, message = "O armazenamento não pode passar de 10 caracteres")
     private String armazenamento;
 
-    @Column(name = "ds_funcionamento", nullable = false, length = 20)
+    @Column(name = "ds_funcionamento", nullable = false, length = 100)
     @NotBlank(message = "O funcionamento é obrigatório")
-    @Size(max = 20, message = "O funcionamento não pode passar de 20 caracteres")
+    @Size(max = 100, message = "O funcionamento não pode passar de 100 caracteres")
     private String funcionamento;
 
     @Column(name = "ds_ativo", nullable = false)
-    @NotNull(message = "O ativo é obrigatório")
     private boolean ativo;
 
     @OneToOne(optional = false, cascade = CascadeType.ALL)
