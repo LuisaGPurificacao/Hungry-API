@@ -25,6 +25,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers(HttpMethod.POST, "/hungry/api/centros").permitAll()
                 .requestMatchers(HttpMethod.POST, "/hungry/api/centros/login").permitAll()
+                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**"). permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable().cors().and()
