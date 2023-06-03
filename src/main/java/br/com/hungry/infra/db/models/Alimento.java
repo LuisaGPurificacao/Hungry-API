@@ -53,8 +53,7 @@ public class Alimento {
     private CentroDistribuicao centroDistribuicao;
 
     @ManyToOne
-    @JoinColumn(name = "id_empresa", nullable = false)
-    @NotNull(message = "A empresa é obrigatória")
+    @JoinColumn(name = "id_empresa")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY, value = "empresa")
     private Empresa empresa;
 
