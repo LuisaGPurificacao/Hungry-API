@@ -65,7 +65,7 @@ public class CentroDistribuicao {
     @Valid
     private Endereco endereco;
 
-    @OneToMany(mappedBy = "centroDistribuicao")
+    @OneToMany(mappedBy = "centroDistribuicao", cascade = CascadeType.ALL)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<Alimento> alimentos = new ArrayList<>();
 
