@@ -3,7 +3,7 @@
 Uma API para sistema de controle de alimentos em centros de distribuições
 
 > A empresa irá disponibilizar a quantidade e em qual centro de distribuição o alimento será disponibilizado para que o
-> usuário final consiga usufluir desse alimento. O centro de distribuição por sua vez, é responsável por gerenciar esses
+> usuário final consiga usufruir desse alimento. O centro de distribuição por sua vez, é responsável por gerenciar esses
 > alimentos.
 
 ---
@@ -17,6 +17,7 @@ Uma API para sistema de controle de alimentos em centros de distribuições
     - [apagar](#apagar-empresas)
 - Centros de distribuição
     - [cadastrar](#cadastrar-centros-de-distribuição)
+    - [login](#login-centros-de-distribuição)
     - [atualizar](#atualizar-centros-de-distribuição)
     - [mostrar detalhes](#mostrar-detalhes-centro-de-distribuição)
     - [listar todos](#listar-todos-centros-de-distribuição)
@@ -64,7 +65,7 @@ Uma API para sistema de controle de alimentos em centros de distribuições
     "email": "bunge@alimentos.com",
     "descricao": "Na Bunge, nosso propósito é conectar agricultores e consumidores para fornecer alimentos e ingredientes essenciais para o mundo.",
     "endereco": {
-       "cep": 02011222,
+       "cep": 22011222,
        "pais": "Brasil",
        "estado": "SP",
        "cidade": "São Paulo",
@@ -114,18 +115,19 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 ```js
 {
     "nome": "Bunge Alimentos S/A",
-    "nome_fantasia": "Bunge Brasil",
-    "email": "bunge@alimentos.com.br",
+    "nome_fantasia": "Bunge",
+    "cnpj": 12345678023390,
+    "email": "bunge@alimentos.com",
     "descricao": "Na Bunge, nosso propósito é conectar agricultores e consumidores para fornecer alimentos e ingredientes essenciais para o mundo.",
     "endereco": {
-       "cep": 02011222,
+       "cep": 22011222,
        "pais": "Brasil",
        "estado": "SP",
        "cidade": "São Paulo",
        "bairro": "Luz",
        "logradouro": "Rua Consolação",
-       "numero": 948,
-       "complemento": "Prédio verde"
+       "numero": 123,
+       "complemento": "Prédio azul"
     }
 }
 ```
@@ -149,22 +151,24 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 
 ```js
 {
-    "id": 198
+    "id": 4,
     "nome": "Bunge Alimentos S/A",
-    "nome_fantasia": "Bunge",
     "cnpj": 12345678023390,
     "email": "bunge@alimentos.com",
     "descricao": "Na Bunge, nosso propósito é conectar agricultores e consumidores para fornecer alimentos e ingredientes essenciais para o mundo.",
     "endereco": {
-       "cep": 02011222,
-       "pais": "Brasil",
-       "estado": "SP",
-       "cidade": "São Paulo",
-       "bairro": "Luz",
-       "logradouro": "Rua Consolação",
-       "numero": 123,
-       "complemento": "Prédio azul"
-    }
+        "id": 8,
+        "cep": 22011222,
+        "pais": "Brasil",
+        "estado": "SP",
+        "cidade": "São Paulo",
+        "bairro": "Luz",
+        "logradouro": "Rua Consolação",
+        "numero": 123,
+        "complemento": "Prédio azul"
+    },
+    "alimentos": [],
+    "nome_fantasia": "Bunge"
 }
 ```
 
@@ -208,6 +212,7 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 | funcionamento | String |     sim     | os horários e os dias de funcionamento do centro                        |
 | capacidade    | String |     sim     | a quantidade de capacidade de alimentos do centro                       |
 | armazenamento | String |     sim     | a quantidade do armazenamento de alimentos do centro                    |
+| senha         | String |     sim     | a senha do centro de distribuição                                       |
 | cep           | int    |     sim     | o CEP de onde fica localizado o centro, deve ser validado com 8 números |
 | país          | String |     sim     | o país onde fica localizado o centro                                    |
 | estado        | String |     sim     | o estado onde fica localizado o centro                                  |
@@ -222,14 +227,14 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 ```js
 {
     "nome": "Santarém Alimentos LTDS",
-    "nome_fantasia": "Santarém",
     "descricao": "Serviço de distribuição em São Paulo",
     "email": "santarem.alimentos@gmail.com",
     "funcionamento": "Aberto das 9:00 às 20:00, não abrimos nos domingos e feriados.",
-    "capacidade": "2 toneladas",
+    "capacidade": "500kg",
     "armazenamento": "300kg",
+    "senha": "santarem.16",
     "endereco": {
-       "cep": 02394881,
+       "cep": 12394881,
        "pais": "Brasil",
        "estado": "SP",
        "cidade": "São Paulo",
@@ -243,10 +248,42 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 
 **Códigos de Respostas**
 
-| código | descrição                                              |
-|--------|--------------------------------------------------------|
-| 201    | centro de distribuição cadastrado com sucesso          |
-| 400    | campos inválidos                                       |
+| código | descrição                                                |
+|--------|----------------------------------------------------------|
+| 201    | centro de distribuição cadastrado com sucesso            |
+| 400    | campos inválidos                                         |
+| 409    | conflito (caso o e-mail já esteja cadastrado no sistema) |
+
+---
+
+### Login Centros de Distribuição
+
+`POST` /hungry/api/centros
+
+> Endpoint para o centro de distribuição se logar no nosso sistema
+
+**Campos da requisição**
+
+| campo         | tipo   | obrigatório | descrição                                                               |
+|---------------|--------|:-----------:|-------------------------------------------------------------------------|
+| email         | String |     sim     | o e-mail do centro de distribuição, deve ser um e-mail válido           |
+| senha         | String |     sim     | a senha do centro de distribuição                                       |
+
+**Exemplo de corpo de requisição**
+
+```js
+{
+    "email": "santarem.alimentos@gmail.com",
+    "senha": "santarem.16"
+}
+```
+
+**Códigos de Respostas**
+
+| código | descrição                                                |
+|--------|----------------------------------------------------------|
+| 201    | centro de distribuição logado com sucesso                |
+| 400    | campos inválidos                                         |
 
 ---
 
@@ -262,10 +299,10 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 |---------------|--------|:-----------:|-------------------------------------------------------------------------|
 | nome          | String |     não     | o nome do centro de distribuição                                        |
 | descricao     | String |     não     | uma descrição sobre o centro de distribuição                            |
-| email         | String |     não     | o e-mail do centro de distribuição, deve ser um e-mail válido           |
 | funcionamento | String |     não     | os horários e os dias de funcionamento do centro                        |
 | capacidade    | String |     não     | a quantidade de capacidade de alimentos do centro                       |
 | armazenamento | String |     não     | a quantidade do armazenamento de alimentos do centro                    |
+| senha         | String |     sim     | a senha do centro de distribuição                                       |
 | cep           | int    |     não     | o CEP de onde fica localizado o centro, deve ser validado com 8 números |
 | país          | String |     não     | o país onde fica localizado o centro                                    |
 | estado        | String |     não     | o estado onde fica localizado o centro                                  |
@@ -280,14 +317,14 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 ```js
 {
     "nome": "Santarém Alimentos LTDS",
-    "nome_fantasia": "Santarém",
     "descricao": "Serviço de distribuição em São Paulo",
     "email": "santarem.alimentos@gmail.com",
     "funcionamento": "Aberto das 9:00 às 20:00, não abrimos nos domingos e feriados.",
-    "capacidade": "2 toneladas",
+    "capacidade": "600kg",
     "armazenamento": "500kg",
+    "senha": "santarem16",
     "endereco": {
-       "cep": 02394881,
+       "cep": 22394881,
        "pais": "Brasil",
        "estado": "SP",
        "cidade": "São Paulo",
@@ -320,42 +357,53 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 
 ```js
 {
-    "id": 12
+    "id": 1,
     "nome": "Santarém Alimentos LTDS",
-    "nome_fantasia": "Santarém",
     "descricao": "Serviço de distribuição em São Paulo",
-    "email": "santarem.alimentos@gmail.com",
-    "funcionamento": "Aberto das 9:00 às 20:00, não abrimos nos domingos e feriados.",
-    "capacidade": "2 toneladas",
+    "email": "armaze@hotmail.com",
+    "capacidade": "600kg",
     "armazenamento": "500kg",
+    "funcionamento": "Aberto das 9:00 às 20:00, não abrimos nos domingos e feriados.",
     "ativo": true,
+    "senha": "santarem16",
     "endereco": {
-       "cep": 02394881,
-       "pais": "Brasil",
-       "estado": "SP",
-       "cidade": "São Paulo",
-       "bairro": "Centro Histórico de São Paulo",
-       "logradouro": "Rua Centro",
-       "numero": 6969,
-       "complemento": "Perto da praça"
+        "id": 9,
+        "cep": 22394881,
+        "pais": "Brasil",
+        "estado": "SP",
+        "cidade": "São Paulo",
+        "bairro": "Centro Histórico de São Paulo",
+        "logradouro": "Rua Centro",
+        "numero": 6969,
+        "complemento": "Perto da praça"
     },
     "alimentos": [
         {
-           "nome": "Banana",
-           "quantidade": 50,
-           "categoria": "Frutas",
+            "id": 1,
+            "nome": "Maçã",
+            "quantidade": "3kg",
+            "categoria": "Frutas",
+            "data_validade": "03/08/2023"
         },
         {
-           "nome": "Arroz",
-           "quantidade": 300,
-           "categoria": "Grãos",
-        },
-        {
-           "nome": "Frango",
-           "quantidade": 150,
-           "categoria": "Proteínas",
+            "id": 6,
+            "nome": "Pão Parmesão",
+            "quantidade": "3kg",
+            "categoria": "Pães",
+            "data_validade": "13/06/2023"
         }
-    ]
+    ],
+    "enabled": true,
+    "password": "santarem16",
+    "accountNonExpired": true,
+    "credentialsNonExpired": true,
+    "accountNonLocked": true,
+    "authorities": [
+        {
+            "authority": "ROLE_USUARIO"
+        }
+    ],
+    "username": "armaze@hotmail.com"
 }
 ```
 
@@ -379,66 +427,133 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 **Exemplo de corpo de resposta**
 
 ```js
-[
-    {
-      "id": 12
-      "nome": "Santarém Alimentos LTDS",
-      "nome_fantasia": "Santarém",
-      "ativo": true,
-      "endereco": {
-         "pais": "Brasil",
-         "estado": "SP",
-         "cidade": "São Paulo",
-         "bairro": "Centro Histórico de São Paulo"
-      },
-      "alimentos": [
-          {
-             "nome": "Banana",
-             "quantidade": 50,
-             "categoria": "Frutas",
-          },
-          {
-             "nome": "Arroz",
-             "quantidade": 300,
-             "categoria": "Grãos",
-          },
-          {
-             "nome": "Frango",
-             "quantidade": 150,
-              "categoria": "Proteínas",
-          }
-      ]
+{
+    "content": [
+        {
+            "id": 3,
+            "nome": "Lykke Centro de Distribuição",
+            "descricao": "Centro de Distribuição de alimentos ♥ Lykke",
+            "email": "lykke@gmail.com",
+            "capacidade": "900kg",
+            "armazenamento": "602kg",
+            "funcionamento": "Aberto das 7:30 às 19:30 - todos os dias da semana",
+            "ativo": true,
+            "senha": "$2a$10$t8kWmnNjqamBMU4yL.YSGea36KkGCsp1Lcs3adX21wCo5BhANBbWa",
+            "endereco": {
+                "id": 6,
+                "cep": 45594222,
+                "pais": "Brasil",
+                "estado": "SP",
+                "cidade": "São Paulo",
+                "bairro": "Jardins",
+                "logradouro": "Rua França",
+                "numero": 204,
+                "complemento": "Prédio Lykke"
+            },
+            "alimentos": [
+                {
+                    "id": 3,
+                    "nome": "Morango",
+                    "quantidade": "1kg",
+                    "categoria": "Frutas",
+                    "data_validade": "03/07/2023"
+                },
+                {
+                    "id": 4,
+                    "nome": "Pão Francês",
+                    "quantidade": "10kg",
+                    "categoria": "Pães",
+                    "data_validade": "10/06/2023"
+                }
+            ],
+            "enabled": true,
+            "password": "$2a$10$t8kWmnNjqamBMU4yL.YSGea36KkGCsp1Lcs3adX21wCo5BhANBbWa",
+            "accountNonExpired": true,
+            "credentialsNonExpired": true,
+            "accountNonLocked": true,
+            "authorities": [
+                {
+                    "authority": "ROLE_USUARIO"
+                }
+            ],
+            "username": "lykke@gmail.com"
+        },
+        {
+            "id": 1,
+            "nome": "Santarém Alimentos LTDS",
+            "descricao": "Serviço de distribuição em São Paulo",
+            "email": "armaze@hotmail.com",
+            "capacidade": "600kg",
+            "armazenamento": "500kg",
+            "funcionamento": "Aberto das 9:00 às 20:00, não abrimos nos domingos e feriados.",
+            "ativo": false,
+            "senha": "santarem16",
+            "endereco": {
+                "id": 9,
+                "cep": 22394881,
+                "pais": "Brasil",
+                "estado": "SP",
+                "cidade": "São Paulo",
+                "bairro": "Centro Histórico de São Paulo",
+                "logradouro": "Rua Centro",
+                "numero": 6969,
+                "complemento": "Perto da praça"
+            },
+            "alimentos": [
+                {
+                    "id": 1,
+                    "nome": "Maçã",
+                    "quantidade": "3kg",
+                    "categoria": "Frutas",
+                    "data_validade": "03/08/2023"
+                },
+                {
+                    "id": 6,
+                    "nome": "Pão Parmesão",
+                    "quantidade": "3kg",
+                    "categoria": "Pães",
+                    "data_validade": "13/06/2023"
+                }
+            ],
+            "enabled": true,
+            "password": "santarem16",
+            "accountNonExpired": true,
+            "credentialsNonExpired": true,
+            "accountNonLocked": true,
+            "authorities": [
+                {
+                    "authority": "ROLE_USUARIO"
+                }
+            ],
+            "username": "armaze@hotmail.com"
+        }
+    ],
+    "pageable": {
+        "sort": {
+            "empty": false,
+            "sorted": true,
+            "unsorted": false
+        },
+        "offset": 0,
+        "pageSize": 5,
+        "pageNumber": 0,
+        "unpaged": false,
+        "paged": true
     },
-    {
-      "id": 16
-      "nome": "Armazém São José Co.",
-      "nome_fantasia": "Armazém São José",
-      "ativo": true,
-      "endereco": {
-         "pais": "Brasil",
-         "estado": "SP",
-         "cidade": "São Paulo",
-         "bairro": "Paraíso"
-      },
-      "alimentos": [
-          {
-             "nome": "Morango",
-             "quantidade": 25,
-             "categoria": "Frutas",
-          },
-          {
-             "nome": "Feijão",
-             "quantidade": 262,
-             "categoria": "Grãos",
-          },
-          {
-             "nome": "Carne de boi",
-             "quantidade": 28,
-              "categoria": "Proteínas",
-          }
-      ]
-    }
-]
+    "last": true,
+    "totalElements": 2,
+    "totalPages": 1,
+    "size": 5,
+    "number": 0,
+    "sort": {
+        "empty": false,
+        "sorted": true,
+        "unsorted": false
+    },
+    "first": true,
+    "numberOfElements": 4,
+    "empty": false
+}
 ```
 
 **Códigos de Respostas**
@@ -469,27 +584,15 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 `PATCH` /hungry/api/centros/{id}
 
 > Endpoint para o centro de distribuição atualizar o seu status como ativo ou inativo
-
-**Campos da requisição**
-
-| campo | tipo    | obrigatório | descrição                                            |
-|-------|---------|:-----------:|------------------------------------------------------|
-| ativo | boolean |     sim     | mostra se o centro de distribuição está ativo ou não |
-
-**Exemplo de corpo de requisição**
-
-```js
-{
-    "ativo": false
-}
-```
+>
+> Se o status estiver como ativo, e uma requisição para esse endpoint for realizada, o status atualiza para inativo.
+> Já se estiver como inativo, ele atualiza para ativo
 
 **Códigos de Respostas**
 
 | código | descrição                                            |
 |--------|------------------------------------------------------|
 | 200    | centro de distribuição atualizado como ativo/inativo |
-| 400    | campo inválido                                       |
 | 404    | não existe centro de distribuição com o ID informado |
 
 ---
@@ -502,28 +605,28 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 
 **Campos da requisição**
 
-| campo      | tipo   | obrigatório | descrição                                                   |
-|------------|--------|:-----------:|-------------------------------------------------------------|
-| nome       | String |     sim     | o nome do alimento                                          |
-| quantidade | int    |     sim     | a quantidade do alimento em kilogramas                      |
-| categoria  | String |     sim     | a categoria do alimento                                     |
-| foto       | String |     não     | a foto do alimento para análise com inteligência artificial |
-| centro_id  | Long   |     sim     | o ID do centro de distribuição que recebeu esse alimento    |
-| empresa_id | Long   |     sim     | o ID da empresa que disponibilizou esse alimento            |
+| campo         | tipo      | obrigatório | descrição                                                |
+|---------------|-----------|:-----------:|----------------------------------------------------------|
+| nome          | String    |     sim     | o nome do alimento                                       |
+| quantidade    | int       |     sim     | a quantidade do alimento em kilogramas                   |
+| categoria     | String    |     sim     | a categoria do alimento                                  |
+| data_validade | LocalDate |     sim     | a data de validade do alimento                           |
+| centro_id     | Long      |     sim     | o ID do centro de distribuição que recebeu esse alimento |
+| empresa_id    | Long      |     sim     | o ID da empresa que disponibilizou esse alimento         |
 
 **Exemplo de corpo de requisição**
 
 ```js
 {
     "nome": "Banana",
-    "quantidade": 100,
+    "quantidade": "100",
     "categoria": "frutas",
-    "foto": "https://foto.com",
-    "centro": {
-      "id": 12
+    "data_validade": "19/06/2023",
+    "centro_distribuicao": {
+      "id": 1
     },
     "empresa": {
-      "id": 198
+      "id": 2
     }
 }
 ```
@@ -545,28 +648,28 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 
 **Campos da requisição**
 
-| campo      | tipo   | obrigatório | descrição                                                   |
-|------------|--------|:-----------:|-------------------------------------------------------------|
-| nome       | String |     não     | o nome do alimento                                          |
-| quantidade | int    |     não     | a quantidade do alimento em kilogramas                      |
-| categoria  | String |     não     | a categoria do alimento                                     |
-| foto       | String |     não     | a foto do alimento para análise com inteligência artificial |
-| centro_id  | Long   |     não     | o ID do centro de distribuição que recebeu esse alimento    |
-| empresa_id | Long   |     não     | o ID da empresa que disponibilizou esse alimento            |
+| campo         | tipo      | obrigatório | descrição                                                |
+|---------------|-----------|:-----------:|----------------------------------------------------------|
+| nome          | String    |     não     | o nome do alimento                                       |
+| quantidade    | int       |     não     | a quantidade do alimento em kilogramas                   |
+| categoria     | String    |     não     | a categoria do alimento                                  |
+| data_validade | LocalDate |     sim     | a data de validade do alimento                           |
+| centro_id     | Long      |     não     | o ID do centro de distribuição que recebeu esse alimento |
+| empresa_id    | Long      |     não     | o ID da empresa que disponibilizou esse alimento         |
 
 **Exemplo de corpo de requisição**
 
 ```js
 {
     "nome": "Banana",
-    "quantidade": 50,
+    "quantidade": "50",
     "categoria": "frutas",
-    "foto": "https://foto.com",
-    "centro": {
-      "id": 12
+    "data_validade": "15/06/2023",
+    "centro_distribuicao": {
+      "id": 1
     },
     "empresa": {
-      "id": 198
+      "id": 2
     }
 }
 ```
@@ -590,17 +693,11 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 
 ```js
 {
-    "id": 190
-    "nome": "Banana",
-    "quantidade": 50,
-    "categoria": "frutas",
-    "foto": "https://foto.com",
-    "centro": {
-      "id": 12
-    },
-    "empresa": {
-      "id": 198
-    }
+    "id": 6,
+    "nome": "Pão Parmesão",
+    "quantidade": "3kg",
+    "categoria": "Pães",
+    "data_validade": "13/06/2023"
 }
 ```
 
