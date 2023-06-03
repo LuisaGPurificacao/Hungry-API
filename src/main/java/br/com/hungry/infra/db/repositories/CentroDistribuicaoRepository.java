@@ -6,8 +6,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CentroDistribuicaoRepository extends JpaRepository<CentroDistribuicao, Long> {
+
+    Optional<CentroDistribuicao> findByEmail(String email);
 
     @Query("select (count(c) > 0) from CentroDistribuicao c where upper(c.email) = upper(:email)")
     boolean existsByEmail(String email);

@@ -10,6 +10,7 @@ import br.com.hungry.infra.db.repositories.EmpresaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -26,6 +27,9 @@ public class DatabaseSeeder implements CommandLineRunner {
 
     @Autowired
     AlimentoRepository alimentoRepository;
+
+    @Autowired
+    PasswordEncoder encoder;
 
     @Override
     public void run(String... args) throws Exception {
@@ -77,6 +81,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                 .armazenamento("231kg")
                 .funcionamento("Aberto das 9:00 às 19:00 - segunda à sexta")
                 .ativo(true)
+                .senha(encoder.encode("ARMAZE1000"))
                 .endereco(Endereco.builder()
                         .cep(45594222)
                         .pais("Brasil").estado("SP").cidade("São Paulo")
@@ -91,6 +96,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                 .armazenamento("569kg")
                 .funcionamento("Aberto das 8:00 às 20:00 - segunda à sábado")
                 .ativo(true)
+                .senha(encoder.encode("mandaqui820"))
                 .endereco(Endereco.builder()
                         .cep(23221003)
                         .pais("Brasil").estado("SP").cidade("São Paulo")
@@ -105,6 +111,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                 .capacidade("900kg")
                 .armazenamento("602kg")
                 .funcionamento("Aberto das 7:30 às 19:30 - todos os dias da semana")
+                .senha(encoder.encode("lykke123"))
                 .ativo(true)
                 .endereco(Endereco.builder()
                         .cep(45594222)

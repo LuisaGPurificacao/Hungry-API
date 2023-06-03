@@ -7,8 +7,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Getter
@@ -20,7 +24,7 @@ import java.util.List;
 @Table(name = "HUNGRY_T_CENTRO_DIST", uniqueConstraints = {
         @UniqueConstraint(name = "un_t_centro_dist", columnNames = {"ds_email"})
 })
-public class CentroDistribuicao {
+public class CentroDistribuicao implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,6 +63,10 @@ public class CentroDistribuicao {
     @Column(name = "ds_ativo", nullable = false)
     private boolean ativo;
 
+    @Column(name = "ds_senha", nullable = false, length = 100)
+    @NotBlank(message = "A senha é obrigatória")
+    private String senha;
+
     @OneToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_endereco", nullable = false)
     @NotNull(message = "O endereço é obrigatório")
@@ -68,5 +76,40 @@ public class CentroDistribuicao {
     @OneToMany(mappedBy = "centroDistribuicao", cascade = CascadeType.ALL)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<Alimento> alimentos = new ArrayList<>();
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_USUARIO"));
+    }
+
+    @Override
+    public String getPassword() {
+        return senha;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
 }

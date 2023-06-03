@@ -1,15 +1,22 @@
 package br.com.hungry.app.controllers;
 
+import br.com.hungry.app.dtos.Credencial;
 import br.com.hungry.domain.exceptions.RestAlreadyExistsException;
 import br.com.hungry.domain.exceptions.RestNotFoundException;
+import br.com.hungry.domain.services.TokenService;
 import br.com.hungry.infra.db.models.CentroDistribuicao;
 import br.com.hungry.infra.db.repositories.CentroDistribuicaoRepository;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -22,6 +29,15 @@ public class CentroDistribuicaoController {
 
     @Autowired
     private CentroDistribuicaoRepository repository;
+
+    @Autowired
+    AuthenticationManager manager;
+
+    @Autowired
+    PasswordEncoder encoder;
+
+    @Autowired
+    TokenService tokenService;
 
     @GetMapping
     public ResponseEntity<Page<CentroDistribuicao>> index(@RequestParam(required = false) String nome,
@@ -45,9 +61,17 @@ public class CentroDistribuicaoController {
         log.info("Adicionando o centro de distribuição: {}", centroDistribuicao);
         if (repository.existsByEmail(centroDistribuicao.getEmail()))
             throw new RestAlreadyExistsException("Um centro de distribuição com esse e-mail já está cadastrado no nosso sistema.");
+        centroDistribuicao.setSenha(encoder.encode(centroDistribuicao.getSenha()));
         centroDistribuicao = repository.save(centroDistribuicao);
         var uri = uriBuilder.path("/hungry/api/centroDistribuicaos/{id}").buildAndExpand(centroDistribuicao.getId()).toUri();
         return ResponseEntity.created(uri).body(centroDistribuicao);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Object> login(@RequestBody @Valid Credencial credencial) {
+        manager.authenticate(credencial.toAuthentication());
+        var token = tokenService.generateToken(credencial);
+        return ResponseEntity.ok(token);
     }
 
     @PutMapping("/{id}")
