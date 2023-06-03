@@ -5,6 +5,75 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 > A empresa irá disponibilizar a quantidade e em qual centro de distribuição o alimento será disponibilizado para que o
 > usuário final consiga usufruir desse alimento. O centro de distribuição por sua vez, é responsável por gerenciar esses
 > alimentos.
+---
+
+## Procedimento para instalação e execução da API
+
+### Pré-requisitos:
+
+- JDK 17
+
+### Baixar o projeto:
+
+- Clonar o projeto ou baixar o ZIP pelo GitHub.
+
+### 1ª Opção: Rodar pela IDE
+
+- Abrir o projeto em alguma IDE de sua preferência (Intellij, Eclipse ou Visual Studio Code)
+- Abrir o caminho: src/main/java/br/com/hungry
+- Clicar com o botão direito do mouse em cima da classe HungryApiApplication
+- Clicar em "Run HungryApiApplication.main()"
+- A aplicação vai começar a rodar, e você poderá acompanhar os logs pelo terminal da IDE
+
+### 2ª Opção: Rodar o .jar pelo terminal
+
+- Abrir o terminal do seu computador
+- Ir até o caminho do projeto e entrar na pasta do projeto (Hungry-API), e depois a pasta "target"
+  - `cd Hungry-API/target`
+- Rodar o comando: `java -jar hungry-api-0.0.1-SNAPSHOT.jar` 
+- A aplicação vai começar a rodar, e você poderá acompanhar os logs pelo terminal do seu computador
+
+---
+
+### 1ª Opção de Testes: Testar pelo Insomnia ou Postman
+
+- Com o projeto rodando na sua máquina, você pode testar os endpoints pelo Insomnia ou pelo Postman
+- Crie uma nova requisição para cada requisição que está documentada no README.md do projeto
+- Coloque o método (POST, GET, PUT, DELETE ou PATCH) e o endpoint que você deseja testar (exemplo: http:localhost:8080/hungry/api/alimentos)
+- Para que você consiga testar, será necessário colocar o Token de segurança no header do endpoint
+  - Faça uma requisição para o endpoint de login com um e-mail e uma senha válidos, já cadastrados no banco
+    - Exemplo:
+    - ```
+       {
+       "email": "fooddeposito@yahoo.com.br",
+       "senha": "mandaqui820"
+       }
+       ```
+  - Salve / copie o token que foi retornado no body de resposta da requisição
+  - Vá para a requisição que você quer testar
+  - Vá em "Auth" ou em "Authentication"
+  - Selecione o tipo Bearer Token
+  - Coloque o token que foi retornado no body da requisição de login
+  - Agora você consegue testar a requisição :)
+
+### 2ª Opção de Testes: Testar pelo Swagger
+
+- Com o projeto rodando na sua máquina, você pode testar os endpoints pelo Swagger/ Open-API
+- Coloque na URL do navegador da sua preferência: http://localhost:8080/swagger-ui/index.html#/
+- Para que você consiga testar, será necessário colocar o Token de segurança na parte "Authorization" do Swagger
+  - Faça uma requisição para o endpoint de login na tag "auth" com um e-mail e uma senha válidos, já cadastrados no banco
+    - Exemplo: 
+      - ```
+        {
+        "email": "fooddeposito@yahoo.com.br",
+        "senha": "mandaqui820"
+        }
+        ```
+  - Salve / copie o token que foi retornado no body de resposta da requisição
+  - Vá para o botão "Authorize" no começo da página do swagger, no canto direito inferior
+  - ![img.png](img.png)
+  - Coloque o token que foi retornado no body da requisição de login e clique em "Authorize"
+  - Agora você consegue testar todas as requisições 😄
 
 ---
 
@@ -136,7 +205,7 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 
 | código | descrição                      |
 |--------|--------------------------------|
-| 201    | empresa atualizada com sucesso |
+| 200    | empresa atualizada com sucesso |
 | 400    | campos inválidos               |
 
 ---
@@ -282,8 +351,8 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 
 | código | descrição                                                |
 |--------|----------------------------------------------------------|
-| 201    | centro de distribuição logado com sucesso                |
-| 400    | campos inválidos                                         |
+| 200    | centro de distribuição logado com sucesso                |
+| 403    | campos inválidos                                         |
 
 ---
 
@@ -340,7 +409,7 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 
 | código | descrição                                     |
 |--------|-----------------------------------------------|
-| 201    | centro de distribuição atualizado com sucesso |
+| 200    | centro de distribuição atualizado com sucesso |
 | 400    | campos inválidos                              |
 
 ---
@@ -635,7 +704,7 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 
 | código | descrição                       |
 |--------|---------------------------------|
-| 200    | alimento cadastrado com sucesso |
+| 201    | alimento cadastrado com sucesso |
 | 400    | campos inválidos                |
 
 ---
