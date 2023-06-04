@@ -4,6 +4,7 @@ import br.com.hungry.app.dtos.Credencial;
 import br.com.hungry.domain.exceptions.RestAlreadyExistsException;
 import br.com.hungry.domain.exceptions.RestNotFoundException;
 import br.com.hungry.domain.services.TokenService;
+import br.com.hungry.infra.db.models.Alimento;
 import br.com.hungry.infra.db.models.CentroDistribuicao;
 import br.com.hungry.infra.db.repositories.CentroDistribuicaoRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,10 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -58,11 +57,40 @@ public class CentroDistribuicaoController {
                                                           @RequestParam(required = false) String categoriaAlimento,
                                                           @PageableDefault(size = 5, sort = "nome", direction = Sort.Direction.ASC) Pageable pageable) {
         Page<CentroDistribuicao> centros = null;
-        if (nome == null && cidade == null && bairro == null && nomeAlimento == null && categoriaAlimento == null)
+        if (nome == null && cidade == null && bairro == null && nomeAlimento == null && categoriaAlimento == null) {
             centros = repository.findAll(pageable);
-        else {
-            List<CentroDistribuicao> centrosList = repository.search(nome, cidade, bairro, nomeAlimento, categoriaAlimento);
-            centros = new PageImpl<CentroDistribuicao>(centrosList, pageable, centrosList.size());
+            for (CentroDistribuicao centro : centros) {
+                List<Alimento> alimentos = centro.getAlimentos();
+                List<Alimento> listaAlimentos = new ArrayList<>();
+                int limite = Math.min(alimentos.size(), 3);
+                for (int i = 0; i < limite; i++) {
+                    listaAlimentos.add(alimentos.get(i));
+                }
+                centro.setAlimentos(listaAlimentos);
+            }
+            return ResponseEntity.ok(centros);
+        }
+        if (nome == null)
+            nome = "";
+        if (cidade == null)
+            cidade = "";
+        if (bairro == null)
+            bairro = "";
+        if (nomeAlimento == null)
+            nomeAlimento = "";
+        if (categoriaAlimento == null)
+            categoriaAlimento = "";
+        log.info("Pesquisando com nome: {}, cidade: {}, bairro: {}, nome do alimento: {} e categoria do alimento: {}", nome, cidade, bairro, nomeAlimento, categoriaAlimento);
+        List<CentroDistribuicao> centrosList = repository.search(nome, cidade, bairro, nomeAlimento, categoriaAlimento);
+        centros = new PageImpl<CentroDistribuicao>(centrosList, pageable, centrosList.size());
+        for (CentroDistribuicao centro : centros) {
+            List<Alimento> alimentos = centro.getAlimentos();
+            List<Alimento> listaAlimentos = new ArrayList<>();
+            int limite = Math.min(alimentos.size(), 3);
+            for (int i = 0; i < limite; i++) {
+                listaAlimentos.add(alimentos.get(i));
+            }
+            centro.setAlimentos(listaAlimentos);
         }
         return ResponseEntity.ok(centros);
     }

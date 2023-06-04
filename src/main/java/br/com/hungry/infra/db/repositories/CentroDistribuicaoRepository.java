@@ -17,7 +17,7 @@ public interface CentroDistribuicaoRepository extends JpaRepository<CentroDistri
 
     @Query("""
             select c from CentroDistribuicao c inner join c.alimentos alimentos
-            where upper(c.nome) = upper(?1) and upper(c.endereco.cidade) = upper(?2) and upper(c.endereco.bairro) = upper(?3) and upper(alimentos.nome) = upper(?4) and upper(alimentos.categoria) = upper(?5)""")
-    List<CentroDistribuicao> search(@Nullable String nome, @Nullable String cidade, @Nullable String bairro, @Nullable String nomeAlimento, @Nullable String categoriaAlimento);
+            where upper(c.nome) like concat('%', upper(?1), '%') and upper(c.endereco.cidade) like concat('%', upper(?2), '%') and upper(c.endereco.bairro) like concat('%', upper(?3), '%') and upper(alimentos.nome) like concat('%', upper(?4), '%') and upper(alimentos.categoria) like concat('%', upper(?5), '%')""")
+    List<CentroDistribuicao> search(String nome, String cidade, String bairro, String nomeAlimento, String categoriaAlimento);
 
 }
