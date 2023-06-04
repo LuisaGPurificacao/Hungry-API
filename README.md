@@ -17,7 +17,7 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 
 - Clonar o projeto ou baixar o ZIP pelo GitHub.
 
-### 1ª Opção: Rodar pela IDE
+### 1ª Opção: Rodar pela IDE (necessário alguma IDE instalada)
 
 - Abrir o projeto em alguma IDE de sua preferência (Intellij, Eclipse ou Visual Studio Code)
 - Abrir o caminho: src/main/java/br/com/hungry
@@ -32,6 +32,16 @@ Uma API para sistema de controle de alimentos em centros de distribuições
   - `cd Hungry-API`
 - Rodar o comando: `java -jar hungry-api.jar` 
 - A aplicação vai começar a rodar, e você poderá acompanhar os logs pelo terminal do seu computador
+
+### 3ª Opção: Rodar com o docker (necessário Docker instalado)
+
+- Instruções no vídeo:
+  - [Vídeo com instruções para rodar a aplicação no Docker](https://www.youtube.com/watch?v=6-QoA9wemWw)
+- Comandos utilizados:
+  - `git clone https://github.com/LuisaGPurificacao/Hungry-API.git`
+  - `cd Hungry-API`
+  - `git checkout feature/devops`
+  - `docker-compose up -d --build`
 
 ---
 
