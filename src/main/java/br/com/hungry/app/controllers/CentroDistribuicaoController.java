@@ -25,6 +25,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -149,6 +150,20 @@ public class CentroDistribuicaoController {
     public ResponseEntity<CentroDistribuicao> listarPorId(@PathVariable Long id) {
         log.info("Procurando o centro de distribuição com id: {}", id);
         return ResponseEntity.ok(getCentroDistribuicao(id));
+    }
+
+    @GetMapping("/email")
+    @SecurityRequirement(name = "bearer-key")
+    @Operation(
+            summary = "Retornar um centro de distribuição por e-mail",
+            description = "Retorna os dados de um centro de distribuição passado pelo parâmetro de query e-mail"
+    )
+    public ResponseEntity<CentroDistribuicao> listarPorEmail(@RequestParam String email) {
+        log.info("Procurando o centro de distribuição com e-mail: {}", email);
+        Optional<CentroDistribuicao> optionalCentro = repository.findByEmail(email);
+        if (optionalCentro.isEmpty())
+            throw new RestNotFoundException("O centro de distribuição com esse e-mail não foi encontrado.");
+        return ResponseEntity.ok(optionalCentro.get());
     }
 
     @DeleteMapping("/{id}")

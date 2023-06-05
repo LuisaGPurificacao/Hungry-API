@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.Optional;
+
 @Slf4j
 @RestController
 @RequestMapping("/hungry/api/empresas")
@@ -64,6 +66,20 @@ public class EmpresaController {
     public ResponseEntity<Empresa> listarPorId(@PathVariable Long id) {
         log.info("Procurando a empresa com id: {}", id);
         return ResponseEntity.ok(getEmpresa(id));
+    }
+
+    @GetMapping()
+    @SecurityRequirement(name = "bearer-key")
+    @Operation(
+            summary = "Retornar uma empresa por e-mail",
+            description = "Retorna os dados de uma empresa passada pelo parâmetro de query e-mail"
+    )
+    public ResponseEntity<Empresa> listarPorEmail(@RequestParam String email) {
+        log.info("Procurando a empresa com e-mail: {}", email);
+        Optional<Empresa> optionalEmpresa = repository.findByEmail(email);
+        if (optionalEmpresa.isEmpty())
+            throw new RestNotFoundException("A empresa com esse e-mail não foi encontrada.");
+        return ResponseEntity.ok(optionalEmpresa.get());
     }
 
     @DeleteMapping("/{id}")

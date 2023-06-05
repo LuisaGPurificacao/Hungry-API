@@ -12,12 +12,14 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 ### Pré-requisitos:
 
 - JDK 17
+- Opcional: alguma IDE
+- Opcional: Docker
 
 ### Baixar o projeto:
 
 - Clonar o projeto ou baixar o ZIP pelo GitHub.
 
-### 1ª Opção: Rodar pela IDE (necessário alguma IDE instalada)
+### 1ª Opção: Rodar pela IDE
 
 - Abrir o projeto em alguma IDE de sua preferência (Intellij, Eclipse ou Visual Studio Code)
 - Abrir o caminho: src/main/java/br/com/hungry
@@ -33,7 +35,7 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 - Rodar o comando: `java -jar hungry-api.jar` 
 - A aplicação vai começar a rodar, e você poderá acompanhar os logs pelo terminal do seu computador
 
-### 3ª Opção: Rodar com o docker (necessário Docker instalado)
+### 3ª Opção: Rodar com o docker
 
 - Instruções no vídeo:
   - [Vídeo com instruções para rodar a aplicação no Docker](https://www.youtube.com/watch?v=6-QoA9wemWw)
@@ -93,12 +95,14 @@ Uma API para sistema de controle de alimentos em centros de distribuições
     - [cadastrar](#cadastrar-empresas)
     - [atualizar](#atualizar-empresas)
     - [mostrar detalhes](#mostrar-detalhes-empresa)
+    - [listar por e-mail](#listar-por-e-mail-empresa)
     - [apagar](#apagar-empresas)
 - Centros de distribuição
     - [cadastrar](#cadastrar-centros-de-distribuição)
     - [login](#login-centros-de-distribuição)
     - [atualizar](#atualizar-centros-de-distribuição)
     - [mostrar detalhes](#mostrar-detalhes-centro-de-distribuição)
+    - [listar por e-mail](#listar-por-e-mail-centro-de-distribuição)
     - [listar todos](#listar-todos-centros-de-distribuição)
     - [apagar](#apagar-centros-de-distribuição)
     - [desativar/ ativar](#desativar-ativar-centros-de-distribuição)
@@ -257,6 +261,46 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 |--------|---------------------------------------|
 | 200    | dados da empresa retornados           |
 | 404    | não existe empresa com o ID informado |
+
+---
+
+### Listar por E-mail Empresa
+
+`GET` /hungry/api/empresas?email
+
+> Endpoint para validar se há uma empresa com esse e-mail no nosso sistema
+
+**Exemplo de corpo de resposta**
+
+```js
+{
+    "id": 4,
+    "nome": "Bunge Alimentos S/A",
+    "cnpj": 12345678023390,
+    "email": "bunge@alimentos.com",
+    "descricao": "Na Bunge, nosso propósito é conectar agricultores e consumidores para fornecer alimentos e ingredientes essenciais para o mundo.",
+    "endereco": {
+        "id": 8,
+        "cep": 22011222,
+        "pais": "Brasil",
+        "estado": "SP",
+        "cidade": "São Paulo",
+        "bairro": "Luz",
+        "logradouro": "Rua Consolação",
+        "numero": 123,
+        "complemento": "Prédio azul"
+    },
+    "alimentos": [],
+    "nome_fantasia": "Bunge"
+}
+```
+
+**Códigos de Respostas**
+
+| código | descrição                                 |
+|--------|-------------------------------------------|
+| 200    | dados da empresa retornados               |
+| 404    | não existe empresa com o e-mail informado |
 
 ---
 
@@ -492,6 +536,75 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 |--------|------------------------------------------------------|
 | 200    | dados do centro de distribuição retornados           |
 | 404    | não existe centro de distribuição com o ID informado |
+
+---
+
+### Listar por E-mail Centro de Distribuição
+
+`GET` /hungry/api/centros/email?email
+
+> Endpoint para validar se há um centro de distribuição com esse e-mail no nosso sistema
+
+**Exemplo de corpo de resposta**
+
+```js
+{
+    "id": 1,
+    "nome": "Santarém Alimentos LTDS",
+    "descricao": "Serviço de distribuição em São Paulo",
+    "email": "armaze@hotmail.com",
+    "capacidade": "600kg",
+    "armazenamento": "500kg",
+    "funcionamento": "Aberto das 9:00 às 20:00, não abrimos nos domingos e feriados.",
+    "ativo": true,
+    "senha": "santarem16",
+    "endereco": {
+        "id": 9,
+        "cep": 22394881,
+        "pais": "Brasil",
+        "estado": "SP",
+        "cidade": "São Paulo",
+        "bairro": "Centro Histórico de São Paulo",
+        "logradouro": "Rua Centro",
+        "numero": 6969,
+        "complemento": "Perto da praça"
+    },
+    "alimentos": [
+        {
+            "id": 1,
+            "nome": "Maçã",
+            "quantidade": "3kg",
+            "categoria": "Frutas",
+            "data_validade": "03/08/2023"
+        },
+        {
+            "id": 6,
+            "nome": "Pão Parmesão",
+            "quantidade": "3kg",
+            "categoria": "Pães",
+            "data_validade": "13/06/2023"
+        }
+    ],
+    "enabled": true,
+    "password": "santarem16",
+    "accountNonExpired": true,
+    "credentialsNonExpired": true,
+    "accountNonLocked": true,
+    "authorities": [
+        {
+            "authority": "ROLE_USUARIO"
+        }
+    ],
+    "username": "armaze@hotmail.com"
+}
+```
+
+**Códigos de Respostas**
+
+| código | descrição                                                |
+|--------|----------------------------------------------------------|
+| 200    | dados do centro de distribuição retornados               |
+| 404    | não existe centro de distribuição com o e-mail informado |
 
 ---
 
