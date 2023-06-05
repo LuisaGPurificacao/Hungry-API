@@ -31,19 +31,19 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 
 - Abrir o terminal do seu computador
 - Ir até o caminho do projeto e entrar na pasta do projeto (Hungry-API)
-  - `cd Hungry-API`
-- Rodar o comando: `java -jar hungry-api.jar` 
+    - `cd Hungry-API`
+- Rodar o comando: `java -jar hungry-api.jar`
 - A aplicação vai começar a rodar, e você poderá acompanhar os logs pelo terminal do seu computador
 
 ### 3ª Opção: Rodar com o docker
 
 - Instruções no vídeo:
-  - [Vídeo com instruções para rodar a aplicação no Docker](https://www.youtube.com/watch?v=6-QoA9wemWw)
+    - [Vídeo com instruções para rodar a aplicação no Docker](https://www.youtube.com/watch?v=6-QoA9wemWw)
 - Comandos utilizados:
-  - `git clone https://github.com/LuisaGPurificacao/Hungry-API.git`
-  - `cd Hungry-API`
-  - `git checkout feature/devops`
-  - `docker-compose up -d --build`
+    - `git clone https://github.com/LuisaGPurificacao/Hungry-API.git`
+    - `cd Hungry-API`
+    - `git checkout feature/devops`
+    - `docker-compose up -d --build`
 
 ---
 
@@ -51,41 +51,43 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 
 - Com o projeto rodando na sua máquina, você pode testar os endpoints pelo Insomnia ou pelo Postman
 - Crie uma nova requisição para cada requisição que está documentada no README.md do projeto
-- Coloque o método (POST, GET, PUT, DELETE ou PATCH) e o endpoint que você deseja testar (exemplo: http:localhost:8080/hungry/api/alimentos)
+- Coloque o método (POST, GET, PUT, DELETE ou PATCH) e o endpoint que você deseja testar (exemplo: http:localhost:
+  8080/hungry/api/alimentos)
 - Para que você consiga testar, será necessário colocar o Token de segurança no header do endpoint
-  - Faça uma requisição para o endpoint de login com um e-mail e uma senha válidos, já cadastrados no banco
-    - Exemplo:
-    - ```
+    - Faça uma requisição para o endpoint de login com um e-mail e uma senha válidos, já cadastrados no banco
+        - Exemplo:
+        - ```
        {
        "email": "fooddeposito@yahoo.com.br",
        "senha": "mandaqui820"
        }
        ```
-  - Salve / copie o token que foi retornado no body de resposta da requisição
-  - Vá para a requisição que você quer testar
-  - Vá em "Auth" ou em "Authentication"
-  - Selecione o tipo Bearer Token
-  - Coloque o token que foi retornado no body da requisição de login
-  - Agora você consegue testar a requisição :)
+    - Salve / copie o token que foi retornado no body de resposta da requisição
+    - Vá para a requisição que você quer testar
+    - Vá em "Auth" ou em "Authentication"
+    - Selecione o tipo Bearer Token
+    - Coloque o token que foi retornado no body da requisição de login
+    - Agora você consegue testar a requisição :)
 
 ### 2ª Opção de Testes: Testar pelo Swagger
 
 - Com o projeto rodando na sua máquina, você pode testar os endpoints pelo Swagger/ Open-API
 - Coloque na URL do navegador da sua preferência: http://localhost:8080/swagger-ui/index.html#/
 - Para que você consiga testar, será necessário colocar o Token de segurança na parte "Authorization" do Swagger
-  - Faça uma requisição para o endpoint de login na tag "auth" com um e-mail e uma senha válidos, já cadastrados no banco
-    - Exemplo: 
-      - ```
+    - Faça uma requisição para o endpoint de login na tag "auth" com um e-mail e uma senha válidos, já cadastrados no
+      banco
+        - Exemplo:
+            - ```
         {
         "email": "fooddeposito@yahoo.com.br",
         "senha": "mandaqui820"
         }
         ```
-  - Salve / copie o token que foi retornado no body de resposta da requisição
-  - Vá para o botão "Authorize" no começo da página do swagger, no canto direito inferior
-  - ![img.png](img.png)
-  - Coloque o token que foi retornado no body da requisição de login e clique em "Authorize"
-  - Agora você consegue testar todas as requisições 😄
+    - Salve / copie o token que foi retornado no body de resposta da requisição
+    - Vá para o botão "Authorize" no começo da página do swagger, no canto direito inferior
+    - ![img.png](img.png)
+    - Coloque o token que foi retornado no body da requisição de login e clique em "Authorize"
+    - Agora você consegue testar todas as requisições 😄
 
 ---
 
@@ -99,7 +101,6 @@ Uma API para sistema de controle de alimentos em centros de distribuições
     - [apagar](#apagar-empresas)
 - Centros de distribuição
     - [cadastrar](#cadastrar-centros-de-distribuição)
-    - [login](#login-centros-de-distribuição)
     - [atualizar](#atualizar-centros-de-distribuição)
     - [mostrar detalhes](#mostrar-detalhes-centro-de-distribuição)
     - [listar por e-mail](#listar-por-e-mail-centro-de-distribuição)
@@ -111,6 +112,8 @@ Uma API para sistema de controle de alimentos em centros de distribuições
     - [atualizar](#atualizar-alimentos)
     - [mostrar detalhes](#mostrar-detalhes-alimento)
     - [apagar](#apagar-alimentos)
+- Login
+    - [login](#login)
 
 ---
 
@@ -127,7 +130,8 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 | nome          | String |     sim     | o nome da empresa                                                                  |
 | nome fantasia | String |     não     | o nome fantasia da empresa                                                         |
 | cnpj          | long   |     sim     | o CNPJ da empresa, deve ser validado com 14 números                                |
-| email         | String |     não     | o e-mail da empresa, deve ser um e-mail válido                                     |
+| email         | String |     sim     | o e-mail da empresa, deve ser um e-mail válido                                     |
+| senha         | String |     sim     | a senha da empresa                                                                 |
 | descricao     | String |     não     | uma descrição sobre a empresa                                                      |
 | cep           | int    |     sim     | o CEP de onde fica localizada a empresa, deve ser validado com 8 números           |
 | país          | String |     sim     | o país onde fica localizada a empresa                                              |
@@ -146,6 +150,7 @@ Uma API para sistema de controle de alimentos em centros de distribuições
     "nome_fantasia": "Bunge",
     "cnpj": 12345678023390,
     "email": "bunge@alimentos.com",
+    "senha": "Bunge123",
     "descricao": "Na Bunge, nosso propósito é conectar agricultores e consumidores para fornecer alimentos e ingredientes essenciais para o mundo.",
     "endereco": {
        "cep": 22011222,
@@ -183,6 +188,7 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 | nome          | String |     não     | o nome da empresa                                                                  |
 | nome fantasia | String |     não     | o nome fantasia da empresa                                                         |
 | email         | String |     não     | o e-mail da empresa, deve ser um e-mail válido                                     |
+| senha         | String |     sim     | a senha da empresa                                                                 |
 | descricao     | String |     não     | uma descrição sobre a empresa                                                      |
 | cep           | int    |     não     | o CEP de onde fica localizada a empresa, deve ser validado com 8 números           |
 | país          | String |     não     | o país onde fica localizada a empresa                                              |
@@ -201,6 +207,7 @@ Uma API para sistema de controle de alimentos em centros de distribuições
     "nome_fantasia": "Bunge",
     "cnpj": 12345678023390,
     "email": "bunge@alimentos.com",
+    "senha": "Bunge123",
     "descricao": "Na Bunge, nosso propósito é conectar agricultores e consumidores para fornecer alimentos e ingredientes essenciais para o mundo.",
     "endereco": {
        "cep": 22011222,
@@ -238,6 +245,7 @@ Uma API para sistema de controle de alimentos em centros de distribuições
     "nome": "Bunge Alimentos S/A",
     "cnpj": 12345678023390,
     "email": "bunge@alimentos.com",
+    "senha": "Bunge123",
     "descricao": "Na Bunge, nosso propósito é conectar agricultores e consumidores para fornecer alimentos e ingredientes essenciais para o mundo.",
     "endereco": {
         "id": 8,
@@ -278,6 +286,7 @@ Uma API para sistema de controle de alimentos em centros de distribuições
     "nome": "Bunge Alimentos S/A",
     "cnpj": 12345678023390,
     "email": "bunge@alimentos.com",
+    "senha": "Bunge123",
     "descricao": "Na Bunge, nosso propósito é conectar agricultores e consumidores para fornecer alimentos e ingredientes essenciais para o mundo.",
     "endereco": {
         "id": 8,
@@ -376,39 +385,6 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 | 201    | centro de distribuição cadastrado com sucesso            |
 | 400    | campos inválidos                                         |
 | 409    | conflito (caso o e-mail já esteja cadastrado no sistema) |
-
----
-
-### Login Centros de Distribuição
-
-`POST` /hungry/api/centros
-
-> Endpoint para o centro de distribuição se logar no nosso sistema
-
-**Campos da requisição**
-
-| campo         | tipo   | obrigatório | descrição                                                               |
-|---------------|--------|:-----------:|-------------------------------------------------------------------------|
-| email         | String |     sim     | o e-mail do centro de distribuição, deve ser um e-mail válido           |
-| senha         | String |     sim     | a senha do centro de distribuição                                       |
-
-**Exemplo de corpo de requisição**
-
-```js
-{
-    "email": "santarem.alimentos@gmail.com",
-    "senha": "santarem.16"
-}
-```
-
-**Códigos de Respostas**
-
-| código | descrição                                                |
-|--------|----------------------------------------------------------|
-| 200    | centro de distribuição logado com sucesso                |
-| 403    | campos inválidos                                         |
-
----
 
 ### Atualizar Centros de Distribuição
 
@@ -914,5 +890,36 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 |--------|----------------------------------------|
 | 204    | alimento apagado com sucesso           |
 | 404    | não existe alimento com o ID informado |
+
+---
+
+### Login
+
+`POST` /hungry/api/login
+
+> Endpoint para o centro de distribuição e a empresa se logar no nosso sistema
+
+**Campos da requisição**
+
+| campo         | tipo   | obrigatório | descrição                                      |
+|---------------|--------|:-----------:|------------------------------------------------|
+| email         | String |     sim     | o e-mail do centro de distribuição/ da empresa |
+| senha         | String |     sim     | a senha do centro de distribuição/ da empresa  |
+
+**Exemplo de corpo de requisição**
+
+```js
+{
+    "email": "santarem.alimentos@gmail.com",
+    "senha": "santarem.16"
+}
+```
+
+**Códigos de Respostas**
+
+| código | descrição                                         |
+|--------|---------------------------------------------------|
+| 200    | centro de distribuição/empresa logado com sucesso |
+| 403    | campos inválidos                                  |
 
 ---

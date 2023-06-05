@@ -1,9 +1,7 @@
 package br.com.hungry.app.controllers;
 
-import br.com.hungry.app.dtos.Credencial;
 import br.com.hungry.domain.exceptions.RestAlreadyExistsException;
 import br.com.hungry.domain.exceptions.RestNotFoundException;
-import br.com.hungry.domain.services.TokenService;
 import br.com.hungry.infra.db.models.Alimento;
 import br.com.hungry.infra.db.models.CentroDistribuicao;
 import br.com.hungry.infra.db.repositories.CentroDistribuicaoRepository;
@@ -15,10 +13,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -37,13 +37,7 @@ public class CentroDistribuicaoController {
     private CentroDistribuicaoRepository repository;
 
     @Autowired
-    AuthenticationManager manager;
-
-    @Autowired
     PasswordEncoder encoder;
-
-    @Autowired
-    TokenService tokenService;
 
     @GetMapping
     @SecurityRequirement(name = "bearer-key")
@@ -113,18 +107,6 @@ public class CentroDistribuicaoController {
         return ResponseEntity.created(uri).body(centroDistribuicao);
     }
 
-    @PostMapping("/login")
-    @Tag(name = "auth")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Centro de distribuição logado com sucesso"),
-            @ApiResponse(responseCode = "403", description = "Dados inválidos, usuário não cadastrado no sistema"),
-    })
-    public ResponseEntity<Object> login(@RequestBody @Valid Credencial credencial) {
-        manager.authenticate(credencial.toAuthentication());
-        var token = tokenService.generateToken(credencial);
-        return ResponseEntity.ok(token);
-    }
-
     @PutMapping("/{id}")
     @SecurityRequirement(name = "bearer-key")
     @ApiResponses({
@@ -137,6 +119,7 @@ public class CentroDistribuicaoController {
         CentroDistribuicao centroDistribuicaoAntigo = getCentroDistribuicao(id);
         centroDistribuicao.setId(id);
         centroDistribuicao.setEmail(centroDistribuicaoAntigo.getEmail());
+        centroDistribuicao.setSenha(encoder.encode(centroDistribuicao.getSenha()));
         centroDistribuicao = repository.save(centroDistribuicao);
         return ResponseEntity.ok(centroDistribuicao);
     }

@@ -3,6 +3,7 @@ package br.com.hungry.infra.db.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -41,9 +42,15 @@ public class Empresa {
     @NotNull(message = "O CNPJ é obrigatório")
     private Long cnpj;
 
-    @Column(name = "ds_email", length = 150)
+    @Column(name = "ds_email", nullable = false, length = 150)
+    @NotBlank(message = "O e-mail é obrigatório")
+    @Email(message = "Deve ser um e-mail válido")
     @Size(max = 150, message = "O e-mail não pode passar de 150 caracteres")
     private String email;
+
+    @Column(name = "ds_senha", nullable = false, length = 100)
+    @NotBlank(message = "A senha é obrigatória")
+    private String senha;
 
     @Column(name = "ds_empresa")
     @Size(max = 255, message = "A descrição não pode passar de 255 caracteres")

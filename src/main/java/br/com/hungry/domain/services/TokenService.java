@@ -24,14 +24,14 @@ public class TokenService {
     @Value("${jwt.secret}")
     String secret;
 
-    public Token generateToken(@Valid Credencial credencial) {
+    public Token generateToken(@Valid Credencial credencial, String role) {
         Algorithm alg = Algorithm.HMAC256(secret);
         String token = JWT.create()
                 .withSubject(credencial.email())
                 .withIssuer("Hungry")
                 .withExpiresAt(Instant.now().plus(1, ChronoUnit.HOURS))
                 .sign(alg);
-        return new Token(token, "JWT", "Bearer");
+        return new Token(token, "JWT", "Bearer", role);
     }
 
     public CentroDistribuicao getValidateUser(String token) {

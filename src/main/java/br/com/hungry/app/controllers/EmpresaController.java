@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -21,14 +22,17 @@ import java.util.Optional;
 @Slf4j
 @RestController
 @RequestMapping("/hungry/api/empresas")
-@SecurityRequirement(name = "bearer-key")
 @Tag(name = "Empresas")
 public class EmpresaController {
 
     @Autowired
     private EmpresaRepository repository;
 
+    @Autowired
+    PasswordEncoder encoder;
+
     @PostMapping
+    @Tag(name = "auth")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Empresa cadastrada com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos, a validação falhou"),
@@ -38,12 +42,14 @@ public class EmpresaController {
         log.info("Adicionando a empresa: {}", empresa);
         if (repository.existsByCnpj(empresa.getCnpj()))
             throw new RestAlreadyExistsException("Uma empresa com esse CNPJ já está cadastrada no nosso sistema.");
+        empresa.setSenha(encoder.encode(empresa.getSenha()));
         empresa = repository.save(empresa);
         var uri = uriBuilder.path("/hungry/api/empresas/{id}").buildAndExpand(empresa.getId()).toUri();
         return ResponseEntity.created(uri).body(empresa);
     }
 
     @PutMapping("/{id}")
+    @SecurityRequirement(name = "bearer-key")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Empresa atualizada com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos, a validação falhou"),
@@ -54,11 +60,13 @@ public class EmpresaController {
         Empresa empresaAntiga = getEmpresa(id);
         empresa.setId(id);
         empresa.setCnpj(empresaAntiga.getCnpj());
+        empresa.setSenha(encoder.encode(empresa.getSenha()));
         empresa = repository.save(empresa);
         return ResponseEntity.ok(empresa);
     }
 
     @GetMapping("/{id}")
+    @SecurityRequirement(name = "bearer-key")
     @Operation(
             summary = "Detalhes da empresa",
             description = "Retorna os dados de uma empresa passada pelo parâmetro de path id"
@@ -83,6 +91,7 @@ public class EmpresaController {
     }
 
     @DeleteMapping("/{id}")
+    @SecurityRequirement(name = "bearer-key")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Empresa removida com sucesso"),
             @ApiResponse(responseCode = "404", description = "Empresa não encontrada")

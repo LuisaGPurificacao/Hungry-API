@@ -5,6 +5,6 @@ import java.util.List;
 public record StatusErrorResponse(
         Integer codigo,
         String mensagem,
-        List<RestValidationError> erros
+        List<RestValidationError> detalhes
 ) {
 }
