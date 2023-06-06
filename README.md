@@ -57,11 +57,11 @@ Uma API para sistema de controle de alimentos em centros de distribuições
     - Faça uma requisição para o endpoint de login com um e-mail e uma senha válidos, já cadastrados no banco
         - Exemplo:
         - ```
-       {
-       "email": "fooddeposito@yahoo.com.br",
-       "senha": "mandaqui820"
-       }
-       ```
+          {
+          "email": "fooddeposito@yahoo.com.br",
+          "senha": "mandaqui820"
+          }
+          ```
     - Salve / copie o token que foi retornado no body de resposta da requisição
     - Vá para a requisição que você quer testar
     - Vá em "Auth" ou em "Authentication"
@@ -78,11 +78,11 @@ Uma API para sistema de controle de alimentos em centros de distribuições
       banco
         - Exemplo:
             - ```
-        {
-        "email": "fooddeposito@yahoo.com.br",
-        "senha": "mandaqui820"
-        }
-        ```
+          {
+          "email": "fooddeposito@yahoo.com.br",
+          "senha": "mandaqui820"
+          }
+          ```
     - Salve / copie o token que foi retornado no body de resposta da requisição
     - Vá para o botão "Authorize" no começo da página do swagger, no canto direito inferior
     - ![img.png](img.png)
