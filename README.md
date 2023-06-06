@@ -7,6 +7,13 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 > alimentos.
 ---
 
+## Vídeos
+
+- [Vídeo Pitch](https://www.youtube.com/watch?v=6-QoA9wemWw)
+- [Vídeo Integrações (front-end, back-end e banco de dados)](https://www.youtube.com/watch?v=6-QoA9wemWw)
+
+---
+
 ## Procedimento para instalação e execução da API
 
 ### Pré-requisitos:
@@ -77,7 +84,7 @@ Uma API para sistema de controle de alimentos em centros de distribuições
     - Faça uma requisição para o endpoint de login na tag "auth" com um e-mail e uma senha válidos, já cadastrados no
       banco
         - Exemplo:
-            - ```
+        - ```
           {
           "email": "fooddeposito@yahoo.com.br",
           "senha": "mandaqui820"
