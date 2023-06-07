@@ -9,7 +9,7 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 
 ## Vídeos
 
-- [Vídeo Pitch](https://www.youtube.com/watch?v=6-QoA9wemWw)
+- [Vídeo Pitch](https://www.youtube.com/watch?v=jXJIXrdogVM)
 - [Vídeo Integrações (front-end, back-end e banco de dados)](https://www.youtube.com/watch?v=6-QoA9wemWw)
 
 ---
