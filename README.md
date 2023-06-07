@@ -5,6 +5,12 @@ Uma API para sistema de controle de alimentos em centros de distribuições
 > A empresa irá disponibilizar a quantidade e em qual centro de distribuição o alimento será disponibilizado para que o
 > usuário final consiga usufruir desse alimento. O centro de distribuição por sua vez, é responsável por gerenciar esses
 > alimentos.
+
+**Hungry Group**
+- RM93596 - Eduarda Vieira Gomes
+- RM94275 - Lívia Carvalho Keller
+- RM95324 - Luisa Gabriele da Purificação
+
 ---
 
 ## Vídeos
